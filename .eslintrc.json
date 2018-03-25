@@ -1,0 +1,16 @@
+{
+  "parser": "babel-eslint",
+  "env": {
+    "browser": true,
+    "jest": true
+  },
+  "rules": {
+    "strict": 0,
+    "react/prop-types": "skipUndeclared",
+    "react/jsx-filename-extension": false,
+    "no-use-before-define": ["error", { "variables": false }],
+    "import/no-unresolved": false,
+    "import/extensions": false
+  },
+  "extends": ["airbnb", "prettier", "prettier/react"]
+}

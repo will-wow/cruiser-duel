@@ -1,0 +1,1 @@
+export type Coordiates = [number, number, number];

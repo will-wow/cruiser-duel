@@ -1,0 +1,12 @@
+{
+  "compilerOptions": {
+    "allowJs": true,
+    "jsx": "react",
+    "moduleResolution": "node",
+    "noEmit": true,
+    "target": "es6",
+    "noUnusedLocals": true,
+    "noUnusedParameters": true
+  },
+  "exclude": ["node_modules", "static_assets", "temp", "jest", "__tests__"]
+}
