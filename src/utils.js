@@ -6,8 +6,8 @@ export const log = (...args) => data => {
   return data;
 };
 
-export const logIf = (predicate, ...args) => data => 
-  predicate(data) ? log(...args)(data) : data
+export const logIf = (predicate, ...args) => data =>
+  predicate(data) ? log(...args)(data) : data;
 
 export const mapIndexed = R.addIndex(R.map);
 

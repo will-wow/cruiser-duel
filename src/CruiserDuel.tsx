@@ -36,7 +36,6 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
 
   frame = () => {
     const { position, velocity, target, acceleration } = this.state;
-    console.log(this.state);
 
     const deltaSeconds = this.getAndUpdateLastUpdated();
 

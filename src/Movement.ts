@@ -44,6 +44,10 @@ export const degreesToRadians = (degrees: number): number =>
 const readiansToDegrees = (radians: number): number => radians * fromRadians;
 
 const deltaV = (maxAccel, position, target, velocity): number => {
+  if (position === target) {
+    return 0;
+  }
+
   const distanceToGo = Math.abs(target - position);
   const timeToStop = velocity / maxAccel;
   const distanceToStop = 0.5 * maxAccel * timeToStop * timeToStop;
@@ -54,7 +58,7 @@ const deltaV = (maxAccel, position, target, velocity): number => {
 };
 
 const accelerate = (accel, position, target, velocity) =>
-  position > target ? velocity + accel : velocity - accel;
+  position < target ? velocity + accel : velocity - accel;
 
 const decelerate = (accel, position, target, velocity) =>
-  position > target ? velocity - accel : velocity - accel;
+  position < target ? velocity - accel : velocity - accel;

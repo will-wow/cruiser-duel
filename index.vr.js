@@ -3,7 +3,7 @@ import { AppRegistry } from "react-vr";
 
 import CruiserDuel from "./src/CruiserDuel";
 
-const App = ()  => <CruiserDuel />
+const App = () => <CruiserDuel />;
 
 export default App;
 
