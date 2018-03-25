@@ -1,24 +1,24 @@
 import * as React from "react";
 import { asset, Model } from "react-vr";
 
-import { Coordiates } from "./Style";
+import * as Coordinates from "./Coordinates";
 
 interface ShipProps {
-  translate: Coordiates;
-  rotateX?: number;
-  rotateY?: number;
-  rotateZ?: number;
+  heading: Coordinates.t;
+  position: Coordinates.t;
 }
 
 class Ship extends React.Component<ShipProps> {
   static defaultProps: Partial<ShipProps> = {
-    rotateX: 0,
-    rotateY: 0,
-    rotateZ: 0
+    heading: { x: 0, y: 0, z: 0 },
+    position: { x: 0, y: 0, z: 0 }
   };
 
   render() {
-    const { translate, rotateX, rotateY, rotateZ } = this.props;
+    const {
+      heading: { x: rotateX, y: rotateY, z: rotateZ },
+      position: { x: positionX, y: positionY, z: positionZ }
+    } = this.props;
     return (
       <Model
         source={{
@@ -27,13 +27,13 @@ class Ship extends React.Component<ShipProps> {
         }}
         style={{
           transform: [
-            { translate },
+            { translate: [positionX, positionY, positionZ] },
             { rotateX },
             { rotateY },
             { rotateZ },
             { scale: 0.5 },
             { rotateX: -90 },
-            { rotateZ: 180 },
+            { rotateZ: 180 }
           ]
         }}
         lit={true}

@@ -1,1 +1,1 @@
-export type Coordiates = [number, number, number];
+export type StyleCoordinates = [number, number, number];

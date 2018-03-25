@@ -1,4 +1,4 @@
-import { Coordiates } from "./Style";
+import { Coordinates } from "./Style";
 
 const toRadians = Math.PI / 180;
 
@@ -7,7 +7,7 @@ export const degreesToRadians = (degrees: number): number =>
 
 export const angleToTranslate = (radius: number, y: number) => (
   angle: number
-): Coordiates => {
+): Coordinates => {
   const radians = degreesToRadians(angle);
   const x = radius * Math.sin(radians);
   const z = radius * Math.cos(radians);

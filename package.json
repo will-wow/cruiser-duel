@@ -58,7 +58,7 @@
       "^.+\\.[jt]sx?$": "<rootDir>/jest/preprocessor.js"
     },
     "testMatch": [
-      "<rootDir>/src/**/*-test.{ts,tsx}"
+      "<rootDir>/src/**/*.test.{ts,tsx}"
     ],
     "moduleFileExtensions": [
       "ts",
