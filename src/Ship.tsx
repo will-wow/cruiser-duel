@@ -1,11 +1,11 @@
 import * as React from "react";
 import { asset, Model } from "react-vr";
 
-import * as Coordinates from "./Coordinates";
+import * as Vector from "./Vector";
 
 interface ShipProps {
-  heading: Coordinates.t;
-  position: Coordinates.t;
+  heading: Vector.t;
+  position: Vector.t;
 }
 
 class Ship extends React.Component<ShipProps> {

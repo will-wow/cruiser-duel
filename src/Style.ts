@@ -1,1 +1,1 @@
-export type StyleCoordinates = [number, number, number];
+export type StyleVector = [number, number, number];

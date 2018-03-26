@@ -1,12 +1,12 @@
-import * as Coordinates from "./Coordinates";
+import * as Vector from "./Vector";
 
 export const updateVelocity = (
   maxAccel: number,
-  position: Coordinates.t,
-  velocity: Coordinates.t,
-  target: Coordinates.t,
+  position: Vector.t,
+  velocity: Vector.t,
+  target: Vector.t,
   deltaSeconds: number
-): Coordinates.t => {
+): Vector.t => {
   const accel = maxAccel * deltaSeconds;
   return {
     x: deltaV(accel, position.x, target.x, velocity.x),
@@ -16,25 +16,25 @@ export const updateVelocity = (
 };
 
 export const updatePosition = (
-  velocity: Coordinates.t,
-  position: Coordinates.t
-): Coordinates.t => ({
+  velocity: Vector.t,
+  position: Vector.t
+): Vector.t => ({
   x: velocity.x + position.x,
   y: velocity.y + position.y,
   z: velocity.z + position.z
 });
 
-export const updateHeading = ({ x, y, z }: Coordinates.t) => ({
+export const updateHeading = ({ x, y, z }: Vector.t) => ({
   x: cooordinatesToDegrees(y, z),
   y: cooordinatesToDegrees(x, z),
   z: cooordinatesToDegrees(x, y)
 });
 
 const cooordinatesToDegrees = (x, y): number => {
-  const radians = coordinatesToRadians(x, y);
+  const radians = VectorToRadians(x, y);
   return readiansToDegrees(radians);
 };
-const coordinatesToRadians = (x, y) => Math.atan2(y, x);
+const VectorToRadians = (x, y) => Math.atan2(y, x);
 
 const toRadians = Math.PI / 180;
 const fromRadians = 180 / Math.PI;
