@@ -1,5 +1,5 @@
-import { subtract } from "./Vector";
 import * as R from "ramda";
+import * as Util from "./Util";
 
 export type t = { x: number; y: number; z: number };
 
@@ -17,10 +17,6 @@ export const combine = (
   z: f(v1.z, v2.z)
 });
 
-export const subtract = combine(R.subtract);
-export const add = combine(R.add);
-export const scale = (scaler: number): ((v: t) => t) => map(R.multiply(scaler));
-
 export const map: (f: (coordinate: number) => number) => (vector: t) => t =
   R.map;
 
@@ -29,10 +25,14 @@ export const reduce = (
   acc
 ): ((v: t) => number) => R.pipe(R.values, R.reduce(f, acc));
 
-const square = (x: number): number => x * x;
+export const subtract = combine(R.subtract);
+export const add = combine(R.add);
+export const scale = (scaler: number): ((v: t) => t) => map(R.multiply(scaler));
+
+export const negate = scale(-1);
 
 export const length: (v: t) => number = R.pipe(
-  map(square),
+  map(Util.square),
   reduce(R.add, 0),
   Math.sqrt
 );
@@ -49,3 +49,6 @@ export const moveTowardPoint = (va: t, vb: t, distance: number): t => {
   const normalizedVba = normalize(vba);
   return scale(distance)(normalizedVba);
 };
+
+// TODO
+export const toDegrees = (_v: t): number => 0;

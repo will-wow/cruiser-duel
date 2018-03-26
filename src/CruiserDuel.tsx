@@ -14,6 +14,8 @@ interface CruiserDuelState {
   acceleration: number;
 }
 
+const mass = 100;
+
 // const maxAcceleration = 10;
 // const turningSpeed = 10;
 
@@ -37,26 +39,30 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   frame = () => {
     const { position, velocity, target, acceleration } = this.state;
 
-    // const deltaSeconds = this.getAndUpdateLastUpdated();
-    const deltaSeconds = 1;
+    const deltaSeconds = this.getAndUpdateLastUpdated();
+    // const deltaSeconds = 0.05;
 
-    const newVelocity = Movement.updateVelocity(
+    const accelerationVector = Movement.calculateAccelerationVector(
       acceleration,
       position,
       velocity,
-      target,
-      deltaSeconds
+      target
     );
 
-    console.log({ position, velocity, target, acceleration, deltaSeconds });
+    const newVelocity = Movement.updateVelocity(
+      acceleration,
+      velocity,
+      deltaSeconds,
+      accelerationVector
+    );
 
     this.setState({
       velocity: newVelocity,
       position: Movement.updatePosition(newVelocity, position),
-      heading: Movement.updateHeading(newVelocity)
+      heading: Movement.updateHeading(accelerationVector)
     });
 
-    // this.frameHandle = requestAnimationFrame(this.frame);
+    this.frameHandle = requestAnimationFrame(this.frame);
   };
 
   getAndUpdateLastUpdated() {

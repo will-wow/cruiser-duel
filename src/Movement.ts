@@ -1,30 +1,63 @@
-import * as Vector from "./Vector";
+import * as R from "ramda";
 
-export const updateVelocity = (
+import * as Vector from "./Vector";
+import * as Util from "./Util";
+
+const stopDistance = accel => velocity => Util.square(velocity) / (2 * accel);
+
+/**
+ * The the point the ship could stop at if it started decelerating now, given the position is 0, 0.
+ */
+const vectorToStop = (accel: number, velocity: Vector.t): Vector.t => {
+  const toStop = stopDistance(accel);
+  const stopPoint = Vector.map(toStop)(velocity);
+  return Vector.negate(stopPoint);
+};
+
+/**
+ * The target, given the position is 0, 0.
+ */
+const vectorToTarget: (
+  position: Vector.t,
+  target: Vector.t
+) => Vector.t = R.flip(Vector.subtract);
+
+export const calculateAccelerationVector = (
   maxAccel: number,
   position: Vector.t,
   velocity: Vector.t,
-  target: Vector.t,
-  deltaSeconds: number
-): Vector.t => {
-  const accel = maxAccel * deltaSeconds;
-  return {
-    x: deltaV(accel, position.x, target.x, velocity.x),
-    y: deltaV(accel, position.y, target.y, velocity.y),
-    z: deltaV(accel, position.z, target.z, velocity.z)
-  };
+  target: Vector.t
+) => {
+  const stopDirection = vectorToStop(maxAccel, velocity);
+  const targetDirection = vectorToTarget(position, target);
+
+  const accelerationDirection = Vector.add(stopDirection, targetDirection);
+
+  return Vector.normalize(accelerationDirection);
 };
 
-export const updatePosition = (
+export const updateVelocity = (
+  maxAccel: number,
+  velocity: Vector.t,
+  deltaSeconds: number,
+  accelerationVector: Vector.t
+) => {
+  const deltaV = Vector.scale(maxAccel * deltaSeconds)(accelerationVector);
+
+  return Vector.add(velocity, deltaV);
+};
+
+export const updatePosition: (
   velocity: Vector.t,
   position: Vector.t
-): Vector.t => ({
-  x: velocity.x + position.x,
-  y: velocity.y + position.y,
-  z: velocity.z + position.z
-});
+) => Vector.t =
+  Vector.add;
 
-export const updateHeading = ({ x, y, z }: Vector.t) => ({
+export const updateHeading: (accelerationVector: Vector.t) => Vector.t = ({
+  x,
+  y,
+  z
+}: Vector.t) => ({
   x: cooordinatesToDegrees(y, z),
   y: cooordinatesToDegrees(x, z),
   z: cooordinatesToDegrees(x, y)
@@ -34,6 +67,7 @@ const cooordinatesToDegrees = (x, y): number => {
   const radians = VectorToRadians(x, y);
   return readiansToDegrees(radians);
 };
+
 const VectorToRadians = (x, y) => Math.atan2(y, x);
 
 const toRadians = Math.PI / 180;
@@ -41,24 +75,5 @@ const fromRadians = 180 / Math.PI;
 
 export const degreesToRadians = (degrees: number): number =>
   degrees * toRadians;
+
 const readiansToDegrees = (radians: number): number => radians * fromRadians;
-
-const deltaV = (maxAccel, position, target, velocity): number => {
-  if (position === target) {
-    return 0;
-  }
-
-  const distanceToGo = Math.abs(target - position);
-  const timeToStop = velocity / maxAccel;
-  const distanceToStop = 0.5 * maxAccel * timeToStop * timeToStop;
-
-  return distanceToGo > distanceToStop
-    ? accelerate(maxAccel, position, target, velocity)
-    : decelerate(maxAccel, position, target, velocity);
-};
-
-const accelerate = (accel, position, target, velocity) =>
-  position < target ? velocity + accel : velocity - accel;
-
-const decelerate = (accel, position, target, velocity) =>
-  position < target ? velocity - accel : velocity - accel;

@@ -15,3 +15,5 @@ export const intersects = (xs, ys) =>
   R.pipe(R.map(x => R.contains(x, ys)), R.all(R.identity))(xs);
 
 export const maxOf = predicate => R.pipe(R.sortBy(predicate), R.last);
+
+export const square = (x: number): number => x * x;

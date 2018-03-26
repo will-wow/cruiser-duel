@@ -5,12 +5,11 @@ import * as Vector from "./Vector";
 describe("Vector", () => {
   describe("normalize", () => {
     it("normalizes a simple set of vectors", () => {
-      const v1 = Vector.create(-2, -2, -2);
-      const v2 = Vector.create(3, 3, 3);
+      const v = Vector.create(5, 5, 5);
 
       const expected = Vector.create(0.577, 0.577, 0.577);
 
-      const result = Vector.normalize(v1, v2);
+      const result = Vector.normalize(v);
 
       expect(result.x).toBeCloseTo(expected.x);
     });
