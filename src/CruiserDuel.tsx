@@ -28,10 +28,10 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
 
     this.lastUpdate = Date.now();
     this.state = {
-      position: { x: 0, y: 0, z: -40 },
+      position: { x: 0, y: 0, z: -20 },
       heading: { x: 0, y: 0, z: 0 },
       velocity: { x: 0, y: 0, z: 0 },
-      target: { x: 40, y: 20, z: -200 },
+      target: { x: 100, y: 100, z: -400 },
       acceleration: 10
     };
   }
@@ -39,8 +39,8 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   frame = () => {
     const { position, velocity, target, acceleration } = this.state;
 
-    const deltaSeconds = this.getAndUpdateLastUpdated();
-    // const deltaSeconds = 0.05;
+    // const deltaSeconds = this.getAndUpdateLastUpdated();
+    const deltaSeconds = 0.05;
 
     const accelerationVector = Movement.calculateAccelerationVector(
       acceleration,
@@ -73,7 +73,7 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   }
 
   componentDidMount() {
-    this.frame();
+    // this.frame();
   }
 
   componentWillUnmount() {
@@ -83,12 +83,22 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
     }
   }
 
+  toggle = () => {
+    if (this.frameHandle) {
+      cancelAnimationFrame(this.frameHandle);
+      this.frameHandle = null;
+    } else {
+      this.frame();
+    }
+
+  }
+
   render() {
     const { position, heading } = this.state;
 
     return (
       <View>
-        <VrButton onClick={this.frame}>
+        <VrButton onClick={this.toggle}>
           <Pano source={asset("space.png")} />
         </VrButton>
         <AmbientLight intensity={1} />

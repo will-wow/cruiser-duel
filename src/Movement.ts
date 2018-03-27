@@ -57,15 +57,25 @@ export const updateHeading: (accelerationVector: Vector.t) => Vector.t = ({
   x,
   y,
   z
-}: Vector.t) => ({
-  x: cooordinatesToDegrees(y, z),
-  y: cooordinatesToDegrees(x, z),
-  z: cooordinatesToDegrees(x, y)
-});
+}: Vector.t) => {
+  const r = Vector.length({x, y, z});
+  const t = x !== 0 ? Math.atan(y / x) : 0;
+  const p = Math.acos(-z / r);
 
-const cooordinatesToDegrees = (x, y): number => {
+  const heading = {
+    x: radiansToDegrees(t),
+    y: radiansToDegrees(p),
+    z: 0
+  };
+
+  console.log(heading, { x, y, z });
+
+  return heading;
+};
+
+const cooordinatesToDegrees = (x, y)=> {
   const radians = VectorToRadians(x, y);
-  return readiansToDegrees(radians);
+  return radiansToDegrees(radians);
 };
 
 const VectorToRadians = (x, y) => Math.atan2(y, x);
@@ -73,7 +83,7 @@ const VectorToRadians = (x, y) => Math.atan2(y, x);
 const toRadians = Math.PI / 180;
 const fromRadians = 180 / Math.PI;
 
-export const degreesToRadians = (degrees: number): number =>
+const degreesToRadians = (degrees)=>
   degrees * toRadians;
 
-const readiansToDegrees = (radians: number): number => radians * fromRadians;
+const radiansToDegrees = (radians )=> radians * fromRadians;
