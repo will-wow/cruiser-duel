@@ -31,9 +31,21 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
       position: { x: 0, y: 0, z: -20 },
       heading: { x: 0, y: 0, z: 0 },
       velocity: { x: 0, y: 0, z: 0 },
-      target: { x: 100, y: 100, z: -400 },
-      acceleration: 10
+      target: { x: 300, y: 0, z: -300 },
+      acceleration: 0.5
     };
+
+    setTimeout(() => {
+      this.setState({
+        target: { x: -300, y: 0, z: -200 }
+      });
+    }, 5000);
+
+    setTimeout(() => {
+      this.setState({
+        target: { x: 0, y: 0, z: -40 }
+      });
+    }, 10000);
   }
 
   frame = () => {
@@ -90,8 +102,7 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
     } else {
       this.frame();
     }
-
-  }
+  };
 
   render() {
     const { position, heading } = this.state;
