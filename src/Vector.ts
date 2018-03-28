@@ -50,5 +50,7 @@ export const moveTowardPoint = (va: t, vb: t, distance: number): t => {
   return scale(distance)(normalizedVba);
 };
 
+export const toArray = (v: t): [number, number, number] => [v.x, v.y, v.z];
+
 // TODO
 export const toDegrees = (_v: t): number => 0;

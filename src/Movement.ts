@@ -60,7 +60,7 @@ export const updateHeading: (accelerationVector: Vector.t) => Vector.t = ({
 }: Vector.t) => {
   const heading = {
     x: radiansToDegrees(Math.asin(y)),
-    y: radiansToDegrees(Math.atan2(-z, x)),
+    y: radiansToDegrees(Math.atan2(z, x)),
     z: 0
   };
 

@@ -26,14 +26,14 @@ class Ship extends React.Component<ShipProps> {
           mtl: asset("fearless/fearless.mtl")
         }}
         style={{
-          // layoutOrigin: [0.5, 0.5],
+          layoutOrigin: [0.5, 0.5],
           transform: [
             { translate: [positionX, positionY, positionZ] },
             { rotateZ },
             { rotateY },
             { rotateX },
             { scale: 0.5 },
-            { rotateY: 90 },
+            // { rotateY: 90 },
             { rotateX: -90 },
             // { rotateZ: 180 }
           ]

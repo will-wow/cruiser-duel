@@ -1,5 +1,5 @@
 import * as React from "react";
-import { asset, View, Pano, AmbientLight, VrButton } from "react-vr";
+import { asset, View, Pano, AmbientLight, VrButton, Sphere } from "react-vr";
 
 import * as Vector from "./Vector";
 import * as Movement from "./Movement";
@@ -37,7 +37,7 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
 
     setTimeout(() => {
       this.setState({
-        target: { x: -300, y: 0, z: -200 }
+        target: { x: -300, y: 0, z: -300 }
       });
     }, 5000);
 
@@ -45,7 +45,7 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
       this.setState({
         target: { x: 0, y: 0, z: -40 }
       });
-    }, 10000);
+    }, 30000);
   }
 
   frame = () => {
@@ -105,7 +105,7 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   };
 
   render() {
-    const { position, heading } = this.state;
+    const { position, target, heading } = this.state;
 
     return (
       <View>
@@ -113,6 +113,8 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
           <Pano source={asset("space.png")} />
         </VrButton>
         <AmbientLight intensity={1} />
+
+        <Sphere radius={5} style={{ color: "darkseagreen", transform: [{ translate: Vector.toArray(target) }] }} />
 
         <Ship heading={heading} position={position} />
       </View>
