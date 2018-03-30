@@ -32,10 +32,9 @@ class Ship extends React.Component<ShipProps> {
             { rotateZ },
             { rotateY },
             { rotateX },
-            { scale: 0.5 },
-            // { rotateY: 90 },
+            { rotateY: 180 },
             { rotateX: -90 },
-            // { rotateZ: 180 }
+            { scale: 0.5 },
           ]
         }}
         lit={true}

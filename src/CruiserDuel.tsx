@@ -14,11 +14,6 @@ interface CruiserDuelState {
   acceleration: number;
 }
 
-const mass = 100;
-
-// const maxAcceleration = 10;
-// const turningSpeed = 10;
-
 class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   lastUpdate: number;
   frameHandle: number | null;
@@ -31,8 +26,8 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
       position: { x: 0, y: 0, z: -20 },
       heading: { x: 0, y: 0, z: 0 },
       velocity: { x: 0, y: 0, z: 0 },
-      target: { x: 300, y: 0, z: -300 },
-      acceleration: 0.5
+      target: { x: 300, y: 100, z: -300 },
+      acceleration: 3
     };
 
     // setTimeout(() => {
@@ -54,9 +49,11 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
     // const deltaSeconds = this.getAndUpdateLastUpdated();
     const deltaSeconds = 0.05;
 
+    const newPosition = Movement.updatePosition(deltaSeconds, velocity, position);
+
     const accelerationVector = Movement.calculateAccelerationVector(
       acceleration,
-      position,
+      newPosition,
       velocity,
       target
     );
@@ -64,15 +61,16 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
     const newVelocity = Movement.updateVelocity(
       acceleration,
       velocity,
-      target,
       accelerationVector,
-      deltaSeconds,
+      deltaSeconds
     );
+
+    const newHeading = Movement.updateHeading(accelerationVector);
 
     this.setState({
       velocity: newVelocity,
-      position: Movement.updatePosition(newVelocity, position),
-      heading: Movement.updateHeading(accelerationVector)
+      position: newPosition,
+      heading: newHeading
     });
 
     this.frameHandle = requestAnimationFrame(this.frame);
@@ -115,7 +113,13 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
         </VrButton>
         <AmbientLight intensity={1} />
 
-        <Sphere radius={5} style={{ color: "darkseagreen", transform: [{ translate: Vector.toArray(target) }] }} />
+        <Sphere
+          radius={5}
+          style={{
+            color: "darkseagreen",
+            transform: [{ translate: Vector.toArray(target) }]
+          }}
+        />
 
         <Ship heading={heading} position={position} />
       </View>

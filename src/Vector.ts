@@ -26,7 +26,7 @@ export const reduce = (
 ): ((v: t) => number) => R.pipe(R.values, R.reduce(f, acc));
 
 export const subtract = combine(R.subtract);
-export const add = combine(R.add);
+export const add = R.curry(combine(R.add));
 
 export const divideCoordinates = combine(R.divide);
 
@@ -47,13 +47,4 @@ export const normalize = (v: t): t => {
   return map(divideBy(vLength))(v);
 };
 
-export const moveTowardPoint = (va: t, vb: t, distance: number): t => {
-  const vba = subtract(vb, va);
-  const normalizedVba = normalize(vba);
-  return scale(distance)(normalizedVba);
-};
-
 export const toArray = (v: t): [number, number, number] => [v.x, v.y, v.z];
-
-// TODO
-export const toDegrees = (_v: t): number => 0;

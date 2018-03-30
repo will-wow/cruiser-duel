@@ -2,6 +2,15 @@ import * as Movement from "./Movement";
 import * as Vector from "./Vector";
 
 describe("Movement", () => {
+  describe('vectorToStop', () => {
+    it('does', () => {
+      const accel = 1;
+      const velocity = Vector.create(2, 0, 0);
+
+      expect(Movement.vectorToStop(accel, velocity)).toEqual(Vector.create(3, 0, 0));
+    });
+  });
+
   describe("calculateAccelerationVector", () => {
     it("accelerates", () => {
       const maxAccel = 1;

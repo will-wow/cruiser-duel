@@ -3,8 +3,6 @@ import * as R from "ramda";
 import * as Vector from "./Vector";
 import * as Util from "./Util";
 
-const stopDistance = accel => velocity => Util.square(velocity) / (2 * accel);
-
 export const calculateAccelerationVector = (
   maxAccel: number,
   position: Vector.t,
@@ -14,12 +12,19 @@ export const calculateAccelerationVector = (
   const stopDirection = vectorToStop(maxAccel, velocity);
   const targetDirection = vectorToTarget(position, target);
 
-  const accelerationDirection = Vector.subtract(targetDirection, stopDirection);
+  const fullAccelerationToTarget = Vector.add(targetDirection, stopDirection);
 
-  return Vector.normalize(accelerationDirection);
+  const fullAccelerationToTargetLength = Vector.length(
+    fullAccelerationToTarget
+  );
+
+  const accelerationVector =
+    fullAccelerationToTargetLength <= maxAccel
+      ? fullAccelerationToTarget
+      : Vector.scale(maxAccel)(Vector.normalize(fullAccelerationToTarget));
+
+  return accelerationVector;
 };
-
-// export const requiredAcceleration = (maxAccel: number, position: Vector.t, )
 
 export const updateVelocity = (
   maxAccel: number,
@@ -27,45 +32,32 @@ export const updateVelocity = (
   accelerationVector: Vector.t,
   deltaSeconds: number
 ) => {
+  // TODO: WHYYYYYYY maxAccel *
   const deltaV = Vector.scale(maxAccel * deltaSeconds)(accelerationVector);
 
   return Vector.add(velocity, deltaV);
 };
 
-export const updatePosition: (
+export const updatePosition = (
+  deltaSeconds: number,
   velocity: Vector.t,
   position: Vector.t
-) => Vector.t =
-  Vector.add;
+): Vector.t =>
+  R.pipe(Vector.scale(deltaSeconds), Vector.add(position))(velocity);
 
-export const updateHeading: (accelerationVector: Vector.t) => Vector.t = ({
-  x,
-  y,
-  z
-}: Vector.t) => {
-  const heading = {
+export const updateHeading: (accelerationVector: Vector.t) => Vector.t = (
+  accelerationVector: Vector.t
+) => {
+  const { x, y, z } = Vector.normalize(accelerationVector);
+
+  return {
     x: radiansToDegrees(Math.asin(y)),
     y: radiansToDegrees(Math.atan2(z, x)),
     z: 0
   };
-
-  console.log(heading, { x, y, z });
-
-  return heading;
 };
 
-const cooordinatesToDegrees = (x, y) => {
-  const radians = VectorToRadians(x, y);
-  return radiansToDegrees(radians);
-};
-
-const VectorToRadians = (x, y) => Math.atan2(y, x);
-
-const toRadians = Math.PI / 180;
 const fromRadians = 180 / Math.PI;
-
-const degreesToRadians = degrees => degrees * toRadians;
-
 const radiansToDegrees = radians => radians * fromRadians;
 
 /**
@@ -73,9 +65,11 @@ const radiansToDegrees = radians => radians * fromRadians;
  */
 const vectorToStop = (accel: number, velocity: Vector.t): Vector.t => {
   const toStop = stopDistance(accel);
-  const stopPoint = Vector.map(toStop)(velocity);
-  return Vector.negate(stopPoint);
+  return Vector.map(toStop)(velocity);
 };
+
+const stopDistance = accel => velocity =>
+  Util.square(velocity) / (2 * accel) * (velocity > 0 ? -1 : 1);
 
 /**
  * The target, given the position is 0, 0.
