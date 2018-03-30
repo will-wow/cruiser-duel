@@ -5,23 +5,6 @@ import * as Util from "./Util";
 
 const stopDistance = accel => velocity => Util.square(velocity) / (2 * accel);
 
-/**
- * The the point the ship could stop at if it started decelerating now, given the position is 0, 0.
- */
-const vectorToStop = (accel: number, velocity: Vector.t): Vector.t => {
-  const toStop = stopDistance(accel);
-  const stopPoint = Vector.map(toStop)(velocity);
-  return Vector.negate(stopPoint);
-};
-
-/**
- * The target, given the position is 0, 0.
- */
-const vectorToTarget: (
-  position: Vector.t,
-  target: Vector.t
-) => Vector.t = R.flip(Vector.subtract);
-
 export const calculateAccelerationVector = (
   maxAccel: number,
   position: Vector.t,
@@ -31,16 +14,18 @@ export const calculateAccelerationVector = (
   const stopDirection = vectorToStop(maxAccel, velocity);
   const targetDirection = vectorToTarget(position, target);
 
-  const accelerationDirection = Vector.add(stopDirection, targetDirection);
+  const accelerationDirection = Vector.subtract(targetDirection, stopDirection);
 
   return Vector.normalize(accelerationDirection);
 };
 
+// export const requiredAcceleration = (maxAccel: number, position: Vector.t, )
+
 export const updateVelocity = (
   maxAccel: number,
   velocity: Vector.t,
-  deltaSeconds: number,
-  accelerationVector: Vector.t
+  accelerationVector: Vector.t,
+  deltaSeconds: number
 ) => {
   const deltaV = Vector.scale(maxAccel * deltaSeconds)(accelerationVector);
 
@@ -82,3 +67,20 @@ const fromRadians = 180 / Math.PI;
 const degreesToRadians = degrees => degrees * toRadians;
 
 const radiansToDegrees = radians => radians * fromRadians;
+
+/**
+ * The the point the ship could stop at if it started decelerating now, given the position is 0, 0.
+ */
+const vectorToStop = (accel: number, velocity: Vector.t): Vector.t => {
+  const toStop = stopDistance(accel);
+  const stopPoint = Vector.map(toStop)(velocity);
+  return Vector.negate(stopPoint);
+};
+
+/**
+ * The target, given the position is 0, 0.
+ */
+const vectorToTarget: (
+  position: Vector.t,
+  target: Vector.t
+) => Vector.t = R.flip(Vector.subtract);

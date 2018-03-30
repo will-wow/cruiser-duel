@@ -2,6 +2,40 @@ import * as Movement from "./Movement";
 import * as Vector from "./Vector";
 
 describe("Movement", () => {
+  describe("calculateAccelerationVector", () => {
+    it("accelerates", () => {
+      const maxAccel = 1;
+      const position = Vector.create(0, 0, 0);
+      const velocity = Vector.create(1, 1, 1);
+      const target = Vector.create(2, 2, 2);
+
+      expect(
+        Movement.calculateAccelerationVector(
+          maxAccel,
+          position,
+          velocity,
+          target
+        )
+      ).toEqual(Vector.create(1, 1, 1));
+    });
+
+    it("decelerates", () => {
+      const maxAccel = 1;
+      const position = Vector.create(1.1, 1.1, 1.1);
+      const velocity = Vector.create(1, 1, 1);
+      const target = Vector.create(2, 2, 2);
+
+      expect(
+        Movement.calculateAccelerationVector(
+          maxAccel,
+          position,
+          velocity,
+          target
+        )
+      ).toEqual(Vector.create(-1, -1, -1));
+    });
+  });
+
   describe("updateVelocity", () => {
     it("accelerates", () => {
       const accel = 1;
@@ -13,8 +47,8 @@ describe("Movement", () => {
         Movement.updateVelocity(
           accel,
           velocity,
-          deltaSeconds,
-          accelerationVector
+          accelerationVector,
+          deltaSeconds
         )
       ).toEqual(Vector.create(10.25, 10.25, 10));
     });
@@ -28,8 +62,8 @@ describe("Movement", () => {
         Movement.updateVelocity(
           accel,
           velocity,
-          deltaSeconds,
-          accelerationVector
+          accelerationVector,
+          deltaSeconds
         )
       ).toEqual(Vector.create(9.75, 9.75, 10));
     });
@@ -48,10 +82,10 @@ describe("Movement", () => {
 
   describe("updateHeading", () => {
     it("updates heading from acceleration", () => {
-      const accelerationVector = Vector.create(4, 2, 1);
+      const accelerationVector = Vector.create(1, 1, 1);
 
       expect(Movement.updateHeading(accelerationVector)).toEqual(
-        Vector.create(45, 45, 0)
+        Vector.create(90, 45, 0)
       );
     });
   });

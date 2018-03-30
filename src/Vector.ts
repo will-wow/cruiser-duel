@@ -27,6 +27,9 @@ export const reduce = (
 
 export const subtract = combine(R.subtract);
 export const add = combine(R.add);
+
+export const divideCoordinates = combine(R.divide);
+
 export const scale = (scaler: number): ((v: t) => t) => map(R.multiply(scaler));
 
 export const negate = scale(-1);
