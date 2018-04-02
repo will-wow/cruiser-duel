@@ -16,8 +16,8 @@ class Ship extends React.Component<ShipProps> {
 
   render() {
     const {
-      heading: { x: rotateX, y: rotateY, z: rotateZ },
-      position: { x: positionX, y: positionY, z: positionZ }
+      position,
+      heading: { x: rotateX, y: rotateY, z: rotateZ }
     } = this.props;
     return (
       <Model
@@ -28,13 +28,13 @@ class Ship extends React.Component<ShipProps> {
         style={{
           layoutOrigin: [0.5, 0.5],
           transform: [
-            { translate: [positionX, positionY, positionZ] },
+            { translate: Vector.toArray(position) },
             { rotateZ },
             { rotateY },
             { rotateX },
             { rotateY: 180 },
             { rotateX: -90 },
-            { scale: 0.5 },
+            { scale: 0.5 }
           ]
         }}
         lit={true}

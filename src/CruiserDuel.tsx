@@ -5,6 +5,7 @@ import * as Vector from "./Vector";
 import * as Movement from "./Movement";
 
 import Ship from "./Ship";
+import NavigationSphere from "./NavigationSphere";
 
 interface CruiserDuelState {
   position: Vector.t;
@@ -12,6 +13,8 @@ interface CruiserDuelState {
   velocity: Vector.t;
   target: Vector.t;
   acceleration: number;
+  navigationRadius: number;
+  navigationOn: boolean;
 }
 
 class CruiserDuel extends React.Component<{}, CruiserDuelState> {
@@ -27,7 +30,9 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
       heading: { x: 0, y: 0, z: 0 },
       velocity: { x: 0, y: 0, z: 0 },
       target: { x: 300, y: 100, z: -300 },
-      acceleration: 3
+      acceleration: 3,
+      navigationRadius: 100,
+      navigationOn: true
     };
 
     // setTimeout(() => {
@@ -49,7 +54,11 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
     // const deltaSeconds = this.getAndUpdateLastUpdated();
     const deltaSeconds = 0.05;
 
-    const newPosition = Movement.updatePosition(deltaSeconds, velocity, position);
+    const newPosition = Movement.updatePosition(
+      deltaSeconds,
+      velocity,
+      position
+    );
 
     const accelerationVector = Movement.calculateAccelerationVector(
       acceleration,
@@ -104,13 +113,17 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
   };
 
   render() {
-    const { position, target, heading } = this.state;
+    const {
+      position,
+      target,
+      heading,
+      navigationRadius,
+      navigationOn
+    } = this.state;
 
     return (
       <View>
-        <VrButton onClick={this.toggle}>
-          <Pano source={asset("space.png")} />
-        </VrButton>
+        <Pano source={asset("space.png")} />
         <AmbientLight intensity={1} />
 
         <Sphere
@@ -122,6 +135,14 @@ class CruiserDuel extends React.Component<{}, CruiserDuelState> {
         />
 
         <Ship heading={heading} position={position} />
+
+        {navigationOn && (
+          <NavigationSphere
+            position={position}
+            radius={navigationRadius}
+            onClick={this.toggle}
+          />
+        )}
       </View>
     );
   }
